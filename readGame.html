@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+       <!-- Jayson-Craig Johnson 111-201  -->
+<head>
+  <title>Read Game</title>
+</head>
+<body>
+    <a href = "readGame.html">Link to Games Page</a>
+    <br>
+    <a href = "addGame.html">Link to add game</a>
+    <h1>Games</h1>
+    <div id="tabellHolder"></div>
+    <button>New Game</button>
+
+    <script>
+        
+        var tabell = document.createElement("table")
+        var tabellHolder = document.getElementById("tabellHolder")
+        var tabellRow = tabell.insertRow(0);
+        var tabellHeading1 = tabellRow.insertCell(0);
+        var tabellHeading2 = tabellRow.insertCell(1);
+        tabellHeading1.innerHTML = "Game Name";
+        tabellHeading2.innerHTML = "Platform";
+
+        fetch("https://lime-faithful-hippo.cyclic.app/api/games").then(function (response) {
+            return response.json();
+        }).then(function (games) {
+
+            for (var index in games){
+                var row = tabell.insertRow(tabell.rows.length);
+                var cell1 = row.insertCell(0)
+                var cell2 = row.insertCell(1)
+                var gameLink = document.createElement("a");
+                gameLink.setAttribute("data-id", games[index].id)
+                gameLink.href = "readLeaderboard.html?id="+games[index].id;
+                console.log("readLeaderboard.html?id="+games[index].id)
+                gameLink.innerHTML = games[index].GameName
+                cell1.appendChild(gameLink);
+                cell2.innerHTML = games[index].Platform;
+            }
+        })
+        
+        tabellHolder.appendChild(tabell);
+
+        function goToLederboard(){
+            window.location.href = "readGame.html"
+        }
+
+    </script>
+
+</body>
+
+
+</html>
