@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+       <!-- Jayson-Craig Johnson 111-201  -->
+    <head>
+        <title>Read Leaderboard</title>
+    </head>
+    <body>
+        <a href = "readGame.html">Link to Games Page</a>
+        <br>
+        <a href = "addGame.html">Link to add game</a>
+        <h1 id = "lederboardTitle"></h1>
+        <div id="lederboardHolder"></div>
+        <button onclick="goToAddLeaderboard()">New Entry</buttonn>
+    </body>
+
+
+    <script>
+
+        var lederboard = document.createElement("table")
+        var lederboardHolder = document.getElementById("lederboardHolder")
+        var lederboardTitle = document.getElementById("lederboardTitle")
+        var lederboardRow = lederboard.insertRow(0);
+        var lederboardHeading1 = lederboardRow.insertCell(0);
+        var lederboardHeading2 = lederboardRow.insertCell(1);
+        var lederboardHeading3 = lederboardRow.insertCell(2);
+        lederboardHeading1.innerHTML = "Player";
+        lederboardHeading2.innerHTML = "Score";
+        lederboardHeading3.innerHTML = "Time";
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        
+        fetch("https://lime-faithful-hippo.cyclic.app/api/leaderboard/"+urlParams.get("id")).then(function (response) {
+            return response.json();
+        })
+        .then(function (game) {
+            lederboardTitle.innerText = game.GameName + " Leaderboard";  
+
+            for (var index in game.Leaderboard){
+                var row = lederboard.insertRow(lederboard.rows.length);
+                var cell1 = row.insertCell(0)
+                var cell2 = row.insertCell(1)
+                var cell3 = row.insertCell(2)
+                cell1.innerHTML = game.Leaderboard[index].Player;
+
+                if(game.Leaderboard[index].Score == null){
+                    cell2.innerHTML = "Null";
+                }
+
+                else{
+                    cell2.innerHTML = game.Leaderboard[index].Score;
+                }   
+                cell3.innerHTML = game.Leaderboard[index].Time;
+
+            }
+        })
+        
+        lederboardHolder.appendChild(lederboard);
+
+        function goToAddLeaderboard(){
+            window.location.href = "addLeaderboard.html?id="+urlParams.get("id");
+        }
+    
+
+    </script>
+
+
+</html>
