@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Jayson-Craig Johnson 111-201  -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Game</title>
+</head>
+<body>
+    <a href = "readGame.html">Link to Games Page</a>
+    <br>
+    <a href = "addGame.html">Link to add game</a>
+    <h1>Add Game</h1>
+    <form>
+        <div>        
+            <label for="name">Name: </label>
+            <input  id = "nameInput" name = "name" type="text">
+        </div>
+        <div>
+            <label for="platform">Platform: </label>
+            <input id = "platformInput" name = "platform" type="text">
+        </div>
+        <button type="button" onclick="addGame()">Add Game</button>
+    </form>
+
+    <script>
+        
+        function addGame(){
+
+            nameInput = document.getElementById("nameInput");
+            platformInput = document.getElementById("platformInput");
+
+            if(nameInput.value.trim() != nameInput.value){
+                alert("Name cannot start or end with whitespaces")
+            }
+            else if(platformInput.value.trim() != platformInput.value){
+                alert("Platform cannot start or end with whitespaces")
+            }
+            
+            else{
+                gameInfo={name: nameInput.value.trim(), platform: platformInput.value.trim()}
+                fetch("https://lime-faithful-hippo.cyclic.app/api/games", {method: "POST", body: JSON.stringify(gameInfo), headers: {'Accept': 'application/json','Content-Type': 'application/json'
+                }}).then(function (response){
+                    return response.json()
+                }).then(function (data){
+                    if(data.message.toLowerCase() == "ok"){
+                        window.location.href = "readGame.html"
+                    }else{
+                        alert(data.messgae);
+                    }
+                })
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
