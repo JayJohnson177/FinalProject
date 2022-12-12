@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+       <!-- Jayson-Craig Johnson 111-201  -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Leaderboard </title>
+</head>
+<body>
+    <a href = "readGame.html">Link to Games Page</a>
+    <br>
+    <a href = "addGame.html">Link to add game</a>
+    <h1>Add Leaderboard</h1>
+    <form>
+        <div>        
+            <label for="player">Player: </label>
+            <input  id = "playerInput" name = "player" type="text">
+        </div>
+        <div>
+            <label for="score">Score: </label>
+            <input id = "scoreInput" name = "score" type="number">
+        </div>
+        <div>
+            <label for="time">Time: </label>
+            <input id = "timeInput" name = "time" type="text">
+        </div>
+        <button type="button" onclick="addLeaderboard()">Submit</button>
+    </form>
+
+    <script>
+
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        function addLeaderboard(){
+
+            playerInput = document.getElementById("playerInput");
+            scoreInput = document.getElementById("scoreInput");
+            timeInput = document.getElementById("timeInput");
+
+            if(scoreInput.value.trim() == "" && timeInput.value.trim() == ""){
+                alert("Enter score or time")
+            }
+
+            else if(playerInput.value.trim() != playerInput.value){
+                alert("Player cannot start or end with whitespaces")
+            }
+
+            else if(scoreInput.value.trim() != scoreInput.value){
+                alert("Score cannot start or end with whitespaces")
+            }
+
+            else if(timeInput.value.trim() != timeInput.value){
+                alert("Time cannot start or end with whitespaces")
+            }
+
+            else if(timeInput.value.trim().match(/(\d\d:){3}(\d\d)/) == null){
+                alert("Time must match format hr:min:sec:ms (XX:XX:XX:XX)")
+            }
+            
+
+            else{
+                leaderboardInfo={gameID: urlParams.get("id"), player: playerInput.value.trim(), score: scoreInput.value.trim(), time: timeInput.value.trim()}
+                fetch("https://lime-faithful-hippo.cyclic.app/api/leaderboard/"+urlParams.get("id"), {method: "POST", body: JSON.stringify(leaderboardInfo), headers: {'Accept': 'application/json','Content-Type': 'application/json'
+                
+                }}).then(function (response){
+                    return response.json()
+                }).then(function (data){
+                    console.log(data)
+                    
+                    if(data.message.toLowerCase() == "ok" ){
+                        window.location.href = "readGame.html"
+                    }
+                    else{
+                        alert(data.message);
+                    }
+                })
+            }
+        }
+
+
+    </script>
+
+</body>
+
+
+</html>
